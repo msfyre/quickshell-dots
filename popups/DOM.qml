@@ -36,7 +36,9 @@ PanelWindow {
                 textFont: GTK3.fontName
                 textColor: Colors.adapter.base16[7]
                 displayHeight: GTK3.fontSize * 1.2
-                visibilityTimeSecs: 10
+                visibilityTimeSecs: 8
+
+                willShow: false
             }
 
             VolumePopup {

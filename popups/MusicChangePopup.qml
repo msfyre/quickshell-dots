@@ -11,10 +11,12 @@ Item {
     property string textFont: "sans"
     property real displayHeight: 10
 
+    property bool willShow: true
+
     visible: false
     opacity: 0
 
-    readonly property MprisPlayer player: Modules.MprisMod.getPlayerFromName("mpd")
+    readonly property MprisPlayer player: Modules.MprisMod.activePlayer
 
     implicitWidth: Math.round(popupText.implicitWidth + (displayHeight * 2))
     implicitHeight: Math.round(popupText.implicitHeight + (displayHeight * 1.5))
@@ -25,6 +27,13 @@ Item {
         NumberAnimation {
             id: opacityTween
             duration: 250
+        }
+    }
+
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: opacityTween.duration
+            easing.type: Easing.InOutCubic
         }
     }
 
@@ -42,11 +51,14 @@ Item {
         target: root.player
 
         function onPostTrackChanged() {
+            if (!root.willShow)
+                return;
+
             root.visible = true;
 
             root.opacity = 1;
 
-            popupText.text = `[${root.player.identity}] Now Playing: ${root.player.trackArtist} - ${root.player.trackTitle}`;
+            popupText.text = `[${root.player.identity.toLowerCase()}] Now Playing: ${root.player.trackArtist} - ${root.player.trackTitle}`;
 
             visibilityTimer.restart();
             visibilityTimerForAnimation.restart();
@@ -61,6 +73,17 @@ Item {
         color: root.textColor
         font.family: root.textFont
         font.pixelSize: root.displayHeight
+
+        Behavior on text {
+            PropertyAnimation {
+                target: popupText
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: opacityTween.duration
+                easing.type: Easing.InCubic
+            }
+        }
     }
 
     Timer {
