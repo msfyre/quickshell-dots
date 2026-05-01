@@ -12,9 +12,13 @@ PanelWindow {
 	Clock {
 		anchors {
 			bottom: parent.bottom
+			bottomMargin: 10
 			right: parent.right
+			rightMargin: 10
 		}
 
-		implicitHeight: 50
+		isFormat24H: true
+
+		implicitHeight: 58
 	}
 }

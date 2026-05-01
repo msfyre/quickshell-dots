@@ -38,9 +38,6 @@ Singleton {
 				root.config[entry[0].trim()] = entry[1].trim();
 			}
 
-			console.log("KEYS:", Object.keys(root.config))
-			console.log("VALUES:", Object.values(root.config))
-
 			root.configChanged();
 		}
 
