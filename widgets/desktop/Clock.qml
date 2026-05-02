@@ -35,8 +35,7 @@ Item {
 
 		readonly property real totalHeight: root.implicitHeight * 0.5
 
-
-		spacing: 0
+		spacing: 4
 
 		Text {
 			id: dateText

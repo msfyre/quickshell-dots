@@ -10,7 +10,7 @@ Item {
 	property real borderRadius: 5
 
 	implicitWidth: displayText.implicitWidth + (displayText.font.pixelSize * 3)
-	implicitHeight: Math.round(displayText.implicitHeight * 1.5)
+	implicitHeight: Math.round(displayText.implicitHeight + (displayText.font.pixelSize * 2))
 
 	Behavior on implicitWidth {
 		PropertyAnimation {
