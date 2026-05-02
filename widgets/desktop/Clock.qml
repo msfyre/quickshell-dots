@@ -11,8 +11,8 @@ Item {
 
 	property real borderRadius: 5
 
-	property color textColor: ColorPaletteService.colorScheme.base16[6] ?? "white"
-	property string fontFamily: GTK3Service.getFontName()
+	readonly property color textColor: ColorPaletteService.colorScheme.base16[6] ?? "white"
+	readonly property string fontFamily: GTK3Service.getFontName()
 
 	SystemClock {
 		id: sysclock
@@ -53,14 +53,6 @@ Item {
 			color: root.textColor
 			font.family: root.fontFamily
 			font.pixelSize: layout.totalHeight * 0.65
-		}
-	}
-
-	Connections {
-		target: GTK3Service
-
-		function onConfigChanged() {
-			root.fontFamily = GTK3Service.getFontName();
 		}
 	}
 }
