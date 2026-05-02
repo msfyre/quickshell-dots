@@ -1,15 +1,17 @@
+pragma Singleton
+
 import Quickshell
 import Quickshell.Io
-pragma Singleton
 
 Singleton {
 	id: root
 
 	property string quote: `"Tabula rasa"\n- John Locke`
+	property string quoteDatabase: "literature"
 
 	Process {
 		id: fortuneProcess
-		command: ["fortune", "/usr/share/fortune/literature", "-s"]
+		command: ["fortune", `/usr/share/fortune/${root.quoteDatabase}`, "-s"]
 		running: true
 
 		stdout: StdioCollector {

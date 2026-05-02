@@ -20,7 +20,7 @@ Item {
 	}
 	Behavior on implicitHeight {
 		PropertyAnimation {
-			duration: root.animationDuration / 2
+			duration: root.animationDuration / 4
 			easing.type: Easing.InOutCubic
 		}
 	}
