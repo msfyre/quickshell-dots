@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Wayland
 import qs.widgets.desktop
 
 PanelWindow {
@@ -9,6 +10,9 @@ PanelWindow {
 
 	color: "transparent"
 
+	WlrLayershell.namespace: "qs-desktop-widgets"
+	WlrLayershell.layer: WlrLayer.Background
+
 	Clock {
 		anchors {
 			bottom: parent.bottom
@@ -17,7 +21,7 @@ PanelWindow {
 			rightMargin: 10
 		}
 
-		isFormat24H: true
+		isFormat24H: false
 
 		implicitHeight: 58
 	}
