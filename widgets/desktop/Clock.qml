@@ -51,6 +51,7 @@ Item {
 			anchors.horizontalCenter: parent.horizontalCenter
 			text: root.isFormat24H ? `[24H] ${sysclock.formattedTime}` : sysclock.formattedTime
 			color: root.textColor
+			font.weight: 700
 			font.family: root.fontFamily
 			font.pixelSize: layout.totalHeight * 0.65
 		}

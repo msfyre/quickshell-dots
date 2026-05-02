@@ -10,7 +10,7 @@ Item {
 	property real borderRadius: 5
 
 	implicitWidth: displayText.implicitWidth + (displayText.font.pixelSize * 3)
-	implicitHeight: displayText.implicitHeight * 1.5
+	implicitHeight: Math.round(displayText.implicitHeight * 1.5)
 
 	Behavior on implicitWidth {
 		PropertyAnimation {
@@ -51,12 +51,12 @@ Item {
 		text: QuoteService.quote
 		color: root.textColor
 		font.family: GTK3Service.getFontName()
-		font.pixelSize: GTK3Service.getFontSize()
+		font.pointSize: GTK3Service.getFontSize()
 
 	}
 
 	Timer {
-		interval: 5000
+		interval: 5000 + root.animationDuration
 		running: true
 		repeat: true
 

@@ -26,8 +26,8 @@ Singleton {
 
 		if (!value) return 10;
 
-		var match = value.match(/^([\d]+)/);
-		return match ? parseInt(match[1]) : value;
+		var match = value.match(/(\d+)$/);
+		return match ? parseInt(match[1]) : 10;
 	}
 
 	FileView {
