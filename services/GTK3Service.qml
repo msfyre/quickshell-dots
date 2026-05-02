@@ -21,6 +21,15 @@ Singleton {
 		return (match ? match[1] : value).trim();
 	}
 
+	function getFontSize() {
+		var value = root.config["gtk-font-name"]
+
+		if (!value) return 10;
+
+		var match = value.match(/^([\d]+)/);
+		return match ? parseInt(match[1]) : value;
+	}
+
 	FileView {
 		id: configFileView
 
