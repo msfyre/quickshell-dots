@@ -5,14 +5,18 @@ import qs.services
 Item {
 	id: root
 
-	implicitWidth: layout.implicitWidth + layout.implicitHeight
+	implicitWidth: layout.implicitWidth + (fontSize * 4)
+	implicitHeight: layout.implicitHeight + (fontSize * 2)
 
 	property bool isFormat24H: false
 
 	property real borderRadius: 5
 
+	property real elementScale: 1
+
 	readonly property color textColor: ColorPaletteService.colorScheme.base16[6] ?? "white"
 	readonly property string fontFamily: GTK3Service.getFontName()
+	readonly property real fontSize: GTK3Service.getFontSize() * elementScale
 
 	SystemClock {
 		id: sysclock
@@ -35,7 +39,7 @@ Item {
 
 		readonly property real totalHeight: root.implicitHeight * 0.5
 
-		spacing: 4
+		spacing: 2
 
 		Text {
 			id: dateText
@@ -43,7 +47,7 @@ Item {
 			text: sysclock.formattedDate
 			color: root.textColor
 			font.family: root.fontFamily
-			font.pixelSize: layout.totalHeight * 0.35
+			font.pointSize: root.fontSize * 0.6
 		}
 
 		Text {
@@ -53,7 +57,7 @@ Item {
 			color: root.textColor
 			font.weight: 700
 			font.family: root.fontFamily
-			font.pixelSize: layout.totalHeight * 0.65
+			font.pointSize: root.fontSize
 		}
 	}
 }

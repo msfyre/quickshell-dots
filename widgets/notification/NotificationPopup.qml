@@ -1,7 +1,6 @@
 import QtQuick
 import Quickshell.Services.Notifications
 import qs.services
-import qs.renderers
 
 Item {
 	id: root

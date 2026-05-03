@@ -37,9 +37,10 @@ PanelWindow {
 				easing.type: Easing.OutCubic
 			}
 			PropertyAnimation {
-				property: "opacity"
+				properties: "opacity, scale"
 				from: 0
 				to: 1
+				duration: notifPopup.animationDuration * 2
 				easing.type: Easing.OutCubic
 			}
 		}

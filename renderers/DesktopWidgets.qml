@@ -23,7 +23,7 @@ PanelWindow {
 
 		isFormat24H: false
 
-		implicitHeight: 58
+		elementScale: 1.8
 	}
 
 	Quote {
