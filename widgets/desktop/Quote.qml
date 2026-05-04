@@ -4,7 +4,7 @@ import qs.services
 Item {
 	id: root
 	
-	readonly property color textColor: ColorPaletteService.colorScheme.base16[6] ?? "white"
+	readonly property color textColor: ColorPaletteService.fileRead ? ColorPaletteService.colorScheme.base16[6] : "white"
 	readonly property int animationDuration: 500
 
 	property real borderRadius: 5
@@ -52,7 +52,6 @@ Item {
 		color: root.textColor
 		font.family: GTK3Service.getFontName()
 		font.pointSize: GTK3Service.getFontSize()
-
 	}
 
 	Timer {

@@ -14,12 +14,14 @@ Item {
 
 	property real elementScale: 1
 
-	readonly property color textColor: ColorPaletteService.colorScheme.base16[6] ?? "white"
+	readonly property color textColor: ColorPaletteService.fileRead ? ColorPaletteService.colorScheme.base16[6] : "white"
 	readonly property string fontFamily: GTK3Service.getFontName()
 	readonly property real fontSize: GTK3Service.getFontSize() * elementScale
 
 	SystemClock {
 		id: sysclock
+
+		readonly property string dayOfTheWeek: Qt.formatDateTime(date, "dddd")
 
 		readonly property string formattedTime: Qt.formatDateTime(date, root.isFormat24H ? "HH:mm:ss" : "hh:mm:ss A")
 		readonly property string formattedDate: Qt.formatDateTime(date, "MMMM dd, yyyy")
@@ -44,7 +46,7 @@ Item {
 		Text {
 			id: dateText
 			anchors.horizontalCenter: parent.horizontalCenter
-			text: sysclock.formattedDate
+			text: `(${sysclock.dayOfTheWeek}) ${sysclock.formattedDate}`
 			color: root.textColor
 			font.family: root.fontFamily
 			font.pointSize: root.fontSize * 0.6
