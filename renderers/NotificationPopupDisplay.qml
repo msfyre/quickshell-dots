@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import qs.services
-import qs.widgets.overlays
+import qs.widgets.notification
 
 pragma ComponentBehavior: Bound
 
