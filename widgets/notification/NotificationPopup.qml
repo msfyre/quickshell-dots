@@ -34,29 +34,57 @@ Item {
 		border.width: 2
 	}
 
-	Column {
+	Row {
 		id: layout
 
-		anchors {
-			centerIn: parent
+		anchors.centerIn: parent
+
+		spacing: 10
+
+		Image {
+			id: notificationImage
+
+			source: root.modelData.image
+
+			width: textLayout.implicitHeight * 2
+			height: textLayout.implicitHeight
+
+			fillMode: Image.PreserveAspectFit
+
+			visible: root.modelData.image.length > 0
 		}
 
-		Text {
-			id: summaryText
-			text: root.modelData.summary
-			color: root.textColor
-			anchors.horizontalCenter: parent.horizontalCenter
-			font.bold: true
-			font.family: root.fontFamily
-			font.pointSize: root.fontSize
-		}
-		Text {
-			id: bodyText
-			text: root.modelData.body
-			color: root.textColor
-			anchors.horizontalCenter: parent.horizontalCenter
-			font.family: root.fontFamily
-			font.pointSize: root.fontSize * 0.8
+		Column {
+			id: textLayout
+
+			anchors {
+				verticalCenter: parent.verticalCenter
+			}
+
+			Text {
+				id: summaryText
+				text: root.modelData.summary
+				color: root.textColor
+				anchors.horizontalCenter: parent.horizontalCenter
+
+				font {
+					bold: true
+					family: root.fontFamily
+					pointSize: root.fontSize
+				}
+			}
+
+			Text {
+				id: bodyText
+				text: root.modelData.body
+				color: root.textColor
+				anchors.horizontalCenter: parent.horizontalCenter
+
+				font {
+					family: root.fontFamily
+					pointSize: root.fontSize * 0.8
+				}
+			}
 		}
 	}
 
@@ -76,5 +104,9 @@ Item {
 		onTriggered: {
 			root.visible = false;
 		}
+	}
+
+	Component.onCompleted: {
+		console.log("Image:", root.modelData.image);
 	}
 }

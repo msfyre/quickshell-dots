@@ -32,15 +32,15 @@ PanelWindow {
 		add: Transition {
 			PropertyAnimation {
 				property: "y"
-				duration: notifPopup.animationDuration 
+				duration: notifPopup.animationDuration * 2
 				from: -20
-				easing.type: Easing.OutCubic
+				easing.type: Easing.OutBack
 			}
 			PropertyAnimation {
 				properties: "opacity, scale"
 				from: 0
 				to: 1
-				duration: notifPopup.animationDuration * 2
+				duration: notifPopup.animationDuration * 4
 				easing.type: Easing.OutCubic
 			}
 		}
