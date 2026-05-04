@@ -34,4 +34,13 @@ PanelWindow {
 			leftMargin: 10
 		}
 	}
+
+	InternetConnection {
+		anchors {
+			top: parent.top
+			topMargin: 10
+			right: parent.right
+			rightMargin: 10
+		}
+	}
 }
