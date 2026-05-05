@@ -14,4 +14,5 @@ Item {
 
 	DesktopWidgets {}
 	NotificationPopupDisplay {}
+	VolumePopupDisplay {}
 }
