@@ -7,6 +7,8 @@ import qs.widgets.notification
 pragma ComponentBehavior: Bound
 
 PanelWindow {
+	id: root
+
 	implicitWidth: screen.width
 	implicitHeight: screen.height
 
@@ -32,15 +34,15 @@ PanelWindow {
 		add: Transition {
 			PropertyAnimation {
 				property: "y"
-				duration: notifPopup.animationDuration * 2
+				duration: root.animationDuration
 				from: -20
 				easing.type: Easing.OutBack
 			}
 			PropertyAnimation {
-				properties: "opacity, scale"
+				property: "scale"
 				from: 0
 				to: 1
-				duration: notifPopup.animationDuration * 4
+				duration: root.animationDuration
 				easing.type: Easing.OutCubic
 			}
 		}
@@ -48,8 +50,8 @@ PanelWindow {
 		move: Transition {
 			PropertyAnimation {
 				property: "y"
-				duration: notifPopup.animationDuration * 2
-				easing.type: Easing.InOutBack
+				duration: root.animationDuration * 2
+				easing.type: Easing.OutBack
 			}
 		}
 

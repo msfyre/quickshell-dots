@@ -21,7 +21,7 @@ Item {
         color: ColorPaletteService.colorScheme.background ?? "black"
         border.color: root.textColor
         border.width: 2
-        radius: 4
+        radius: 5
         anchors.fill: parent
     }
 

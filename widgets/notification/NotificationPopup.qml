@@ -17,6 +17,10 @@ Item {
 	implicitWidth: layout.implicitWidth + (summaryText.font.pixelSize * 2)
 	implicitHeight: layout.implicitHeight + (summaryText.font.pointSize * 1.5)
 
+	visible: opacity > 0
+
+	opacity: 1
+
 	PropertyAnimation {
 		id: fadeOutAnimation
 		property: "opacity"
@@ -45,13 +49,11 @@ Item {
 			id: notificationImage
 
 			source: root.modelData.image
+			sourceSize.height: textLayout.implicitHeight
 
-			width: textLayout.implicitHeight * 2
-			height: textLayout.implicitHeight
+			width: textLayout.implicitHeight
 
 			fillMode: Image.PreserveAspectFit
-
-			visible: root.modelData.image.length > 0
 		}
 
 		Column {
@@ -94,15 +96,6 @@ Item {
 
 		onTriggered: {
 			fadeOutAnimation.start();
-		}
-	}
-
-	Timer {
-		interval: root.timeoutMS
-		running: true
-
-		onTriggered: {
-			root.visible = false;
 		}
 	}
 
