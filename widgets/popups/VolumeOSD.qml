@@ -1,21 +1,14 @@
 import QtQuick
-import Quickshell.Services.Pipewire
 import qs.services
 
 Item {
 	id: root
-
-	PwObjectTracker {
-		objects: [Pipewire.defaultAudioSink]
-	}
 
 	property color textColor: ColorPaletteService.colorScheme.base16[7]
 	
 	property real fontSize: GTK3Service.getFontSize()
 
 	property real borderRadius: 5
-
-	property PwNode audioSink: Pipewire.defaultAudioSink
 
 	implicitWidth: layout.implicitWidth + (fontSize * 3)
 	implicitHeight: layout.implicitHeight + (fontSize * 2)
@@ -50,10 +43,10 @@ Item {
 			color: ColorPaletteService.colorScheme.base16[0] ?? "gray"
 			radius: root.borderRadius
 
-			visible: !root.audioSink.audio.muted && root.audioSink.audio.volume > 0
+			visible: !PipewireService.isMuted && PipewireService.volume > 0
 
 			Rectangle {
-				width: parent.width * root.audioSink.audio.volume
+				width: parent.width * PipewireService.volume
 				height: parent.height
 
 				color: root.textColor ?? "white"
@@ -72,10 +65,10 @@ Item {
 			id: volumeText
 			anchors.horizontalCenter: parent.horizontalCenter
 			text: {
-				if (!root.audioSink.audio.muted && root.audioSink.audio.volume > 0) {
-					return `VOLUME: ${Math.round(root.audioSink.audio.volume * 100)}%`
-				} else if (root.audioSink.audio.muted && root.audioSink.audio.volume > 0) {
-					return `VOLUME: ${Math.round(root.audioSink.audio.volume * 100)}% (MUTED)`
+				if (!PipewireService.isMuted && PipewireService.volume > 0) {
+					return `VOLUME: ${Math.round(PipewireService.volume * 100)}%`
+				} else if (PipewireService.isMuted && PipewireService.volume > 0) {
+					return `VOLUME: ${Math.round(PipewireService.volume * 100)}% (MUTED)`
 				} else {
 					return `(MUTED)`
 				}
@@ -87,7 +80,7 @@ Item {
 	}
 
 	Connections {
-		target: root.audioSink.audio
+		target: PipewireService.audioSink.audio
 
 		function onVolumeChanged() {
 			root.opacity = 1;
