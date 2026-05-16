@@ -34,27 +34,11 @@ PanelWindow {
             topMargin: 10
         }
 
-        add: Transition {
-            PropertyAnimation {
-                property: "y"
-                duration: root.animationDuration
-                from: -20
-                easing.type: Easing.OutBack
-            }
-            PropertyAnimation {
-                property: "scale"
-                from: 0
-                to: 1
-                duration: root.animationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
-
         move: Transition {
             PropertyAnimation {
                 property: "y"
                 duration: root.animationDuration
-                easing.type: Easing.InOutCubic
+                easing.type: Easing.OutBack
             }
         }
 
