@@ -3,103 +3,154 @@ import Quickshell.Services.Notifications
 import qs.services
 
 Item {
-	id: root
+    id: root
 
-	required property Notification modelData
-	property int timeoutMS: 5000
+    required property Notification modelData
+    property int timeoutMS: 5000
 
-	readonly property color textColor: ColorPaletteService.colorScheme.base16[7] ?? "white"
-	readonly property string fontFamily: GTK3Service.getFontName()
-	readonly property int fontSize: GTK3Service.getFontSize()
+    readonly property color textColor: ColorPaletteService.colors.color6 ?? "white"
+    readonly property string fontFamily: GTK3Service.getFontName()
+    readonly property int fontSize: GTK3Service.getFontSize()
 
-	readonly property int animationDuration: 500
+    readonly property int animationDuration: 500
 
-	implicitWidth: layout.implicitWidth + (summaryText.font.pixelSize * 2)
-	implicitHeight: layout.implicitHeight + (summaryText.font.pointSize * 1.5)
+    implicitWidth: layout.implicitWidth + (summaryText.font.pixelSize * 2)
+    implicitHeight: layout.implicitHeight + (summaryText.font.pointSize * 1.5)
 
-	visible: opacity > 0
+    visible: opacity > 0
 
-	opacity: 1
+    opacity: baseMouseArea.containsMouse ? 0.95 : 0.8
 
-	PropertyAnimation {
-		id: fadeOutAnimation
-		property: "opacity"
-		target: root
-		to: 0
-		duration: root.animationDuration
-		easing.type: Easing.InExpo
-	}
+    MouseArea {
+        id: baseMouseArea
+        anchors.fill: parent
+        hoverEnabled: true
 
-	Rectangle {
-		anchors.fill: parent
-		color: ColorPaletteService.colorScheme.background ?? "black"
-		radius: 5
-		border.color: root.textColor
-		border.width: 2
-	}
+        onClicked: {
+            fadeoutTimer.running = !fadeoutTimer.running;
+            notificationActions.visible = !notificationActions.visible;
+        }
+    }
 
-	Row {
-		id: layout
+    PropertyAnimation {
+        id: fadeOutAnimation
+        property: "opacity"
+        target: root
+        to: 0
+        duration: root.animationDuration
+        easing.type: Easing.InExpo
+    }
 
-		anchors.centerIn: parent
+    Rectangle {
+        anchors.fill: parent
+        color: ColorPaletteService.colors.background ?? "black"
+        radius: 5
+        border.color: root.textColor
+        border.width: 2
+    }
 
-		spacing: 10
+    Row {
+        id: layout
 
-		Image {
-			id: notificationImage
+        anchors.centerIn: parent
 
-			source: root.modelData.image
-			sourceSize.height: textLayout.implicitHeight
+        spacing: 10
 
-			width: textLayout.implicitHeight
+        Column {
+            id: textLayout
 
-			fillMode: Image.PreserveAspectFit
-		}
+            spacing: 2
 
-		Column {
-			id: textLayout
+            anchors {
+                verticalCenter: parent.verticalCenter
+            }
 
-			anchors {
-				verticalCenter: parent.verticalCenter
-			}
+            Text {
+                id: summaryText
+                text: root.modelData.summary
+                color: root.textColor
+                anchors.horizontalCenter: parent.horizontalCenter
 
-			Text {
-				id: summaryText
-				text: root.modelData.summary
-				color: root.textColor
-				anchors.horizontalCenter: parent.horizontalCenter
+                font {
+                    bold: true
+                    family: root.fontFamily
+                    pointSize: root.fontSize
+                }
+            }
 
-				font {
-					bold: true
-					family: root.fontFamily
-					pointSize: root.fontSize
-				}
-			}
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
 
-			Text {
-				id: bodyText
-				text: root.modelData.body
-				color: root.textColor
-				anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 10
 
-				font {
-					family: root.fontFamily
-					pointSize: root.fontSize * 0.8
-				}
-			}
-		}
-	}
+                Image {
+                    id: notificationImage
 
-	Timer {
-		interval: root.timeoutMS - (root.animationDuration + 100)
-		running: true
+                    anchors.verticalCenter: parent.verticalCenter
 
-		onTriggered: {
-			fadeOutAnimation.start();
-		}
-	}
+                    source: root.modelData.image
+                    height: bodyText.implicitHeight + (root.fontSize * 2)
 
-	Component.onCompleted: {
-		console.log("Image:", root.modelData.image);
-	}
+                    smooth: true
+
+                    fillMode: Image.PreserveAspectFit
+                }
+
+                Text {
+                    id: bodyText
+                    text: root.modelData.body
+                    textFormat: Text.AutoText
+                    color: root.textColor
+
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    wrapMode: Text.WordWrap
+
+                    font {
+                        family: root.fontFamily
+                        pointSize: root.fontSize * 0.8
+                    }
+                }
+            }
+        }
+
+        Column {
+            id: notificationActions
+
+            visible: false
+
+            Repeater {
+                model: root.modelData.actions
+
+                MouseArea {
+                    id: actionButton
+
+                    required property NotificationAction modelData
+
+                    width: actionButtonText.implicitWidth
+                    height: actionButtonText.implicitHeight
+
+                    Text {
+                        id: actionButtonText
+                        text: actionButton.modelData.text
+                    }
+
+                    onClicked: {
+                        modelData.invoke();
+                    }
+                }
+            }
+        }
+    }
+
+    Timer {
+        id: fadeoutTimer
+
+        interval: root.timeoutMS - (root.animationDuration + 100)
+        running: true
+
+        onTriggered: {
+            fadeOutAnimation.start();
+        }
+    }
 }

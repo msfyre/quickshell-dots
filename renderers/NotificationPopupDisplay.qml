@@ -1,69 +1,72 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
+
 import Quickshell
 import Quickshell.Wayland
+
 import qs.services
 import qs.widgets.popups
 
-pragma ComponentBehavior: Bound
-
 PanelWindow {
-	id: root
+    id: root
 
-	implicitWidth: screen.width
-	implicitHeight: screen.height
+    implicitWidth: screen.width
+    implicitHeight: screen.height
 
-	color: "transparent"
+    color: "transparent"
 
-	mask: Region {
-	}
+    mask: Region {
+        item: notifications
+    }
 
-	readonly property int animationDuration: 500
+    readonly property int animationDuration: 500
 
-	WlrLayershell.namespace: "qs-notification-popups"
-	WlrLayershell.layer: WlrLayer.Overlay
+    WlrLayershell.namespace: "qs-notification-popups"
+    WlrLayershell.layer: WlrLayer.Overlay
 
-	Column {
-		id: notifications
+    Column {
+        id: notifications
 
-		anchors {
-			horizontalCenter: parent.horizontalCenter
-			top: parent.top
-			topMargin: 10
-		}
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: 10
+        }
 
-		add: Transition {
-			PropertyAnimation {
-				property: "y"
-				duration: root.animationDuration
-				from: -20
-				easing.type: Easing.OutBack
-			}
-			PropertyAnimation {
-				property: "scale"
-				from: 0
-				to: 1
-				duration: root.animationDuration
-				easing.type: Easing.OutCubic
-			}
-		}
+        add: Transition {
+            PropertyAnimation {
+                property: "y"
+                duration: root.animationDuration
+                from: -20
+                easing.type: Easing.OutBack
+            }
+            PropertyAnimation {
+                property: "scale"
+                from: 0
+                to: 1
+                duration: root.animationDuration
+                easing.type: Easing.OutCubic
+            }
+        }
 
-		move: Transition {
-			PropertyAnimation {
-				property: "y"
-				duration: root.animationDuration * 2
-				easing.type: Easing.OutBack
-			}
-		}
+        move: Transition {
+            PropertyAnimation {
+                property: "y"
+                duration: root.animationDuration
+                easing.type: Easing.InOutCubic
+            }
+        }
 
-		spacing: 5
+        spacing: 5
 
-		Repeater {
-			model: NotificationService.tracked
+        Repeater {
+            model: NotificationService.tracked
 
-			NotificationPopup {
-				id: notifPopup
-				anchors.horizontalCenter: parent.horizontalCenter
-			}
-		}
-	}
+            NotificationPopup {
+                id: notifPopup
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+    }
 }

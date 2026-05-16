@@ -7,49 +7,51 @@ import Quickshell
 import Quickshell.Io
 
 Singleton {
-	id: root
+    id: root
 
-	property var config: ({})
+    property var config: ({})
 
-	// needed because the GTK3 parses both the font name AND the font size in the same entry
-	function getFontName() {
-		var value = root.config["gtk-font-name"]
+    // needed because the GTK3 parses both the font name AND the font size in the same entry
+    function getFontName() {
+        var value = root.config["gtk-font-name"];
 
-		if (!value) return "monospace";
+        if (!value)
+            return "monospace";
 
-		var match = value.match(/^([^\d]+)/);
-		return (match ? match[1] : value).trim();
-	}
+        var match = value.match(/^([^\d]+)/);
+        return (match ? match[1] : value).trim();
+    }
 
-	function getFontSize() {
-		var value = root.config["gtk-font-name"]
+    function getFontSize() {
+        var value = root.config["gtk-font-name"];
 
-		if (!value) return 10;
+        if (!value)
+            return 10;
 
-		var match = value.match(/(\d+)$/);
-		return match ? parseInt(match[1]) : 10;
-	}
+        var match = value.match(/(\d+)$/);
+        return match ? parseInt(match[1]) : 10;
+    }
 
-	FileView {
-		id: configFileView
+    FileView {
+        id: configFileView
 
-		path: StandardPaths.writableLocation(StandardPaths.ConfigLocation) + "/gtk-3.0/settings.ini"
+        path: StandardPaths.writableLocation(StandardPaths.ConfigLocation) + "/gtk-3.0/settings.ini"
 
-		watchChanges: true
+        watchChanges: true
 
-		onLoaded: {
-			var lines = this.text().trim().split("\n");
+        onLoaded: {
+            var lines = this.text().trim().split("\n");
 
-			for (let i = 1; i < lines.length; i++) {
-				const line = lines[i];
-				const entry = line.split("=");
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i];
+                const entry = line.split("=");
 
-				root.config[entry[0].trim()] = entry[1].trim();
-			}
+                root.config[entry[0].trim()] = entry[1].trim();
+            }
 
-			root.configChanged();
-		}
+            root.configChanged();
+        }
 
-		onFileChanged: reload()
-	}
+        onFileChanged: reload()
+    }
 }

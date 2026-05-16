@@ -3,12 +3,12 @@ import Quickshell
 import qs.services
 
 ShellRoot {
-	Loader {
-		id: shellLoader
-		sourceComponent: Main {}
-	}
+    Loader {
+        id: shellLoader
+        sourceComponent: Main {}
+    }
 
-	Component.onCompleted: {
-		QuoteService.quoteDatabase = "linux";
-	}
+    Component.onCompleted: {
+        QuoteService.quoteDatabase = "linux";
+    }
 }

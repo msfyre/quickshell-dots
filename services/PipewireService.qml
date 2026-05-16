@@ -1,21 +1,46 @@
-import Quickshell
-import Quickshell.Services.Pipewire
 pragma Singleton
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Services.Pipewire
 
 Singleton {
-	PwObjectTracker {
-		objects: [Pipewire.defaultAudioSink]
-	}
+    id: root
 
-	readonly property PwNode audioSink: Pipewire.defaultAudioSink
+    PwObjectTracker {
+        objects: [Pipewire.defaultAudioSink]
+    }
 
-	readonly property real volume: {
-		if (audioSink != null) {
-			return audioSink.audio.volume;
-		} else {
-			return 0;
-		}
-	}
+    readonly property PwNode audioSink: Pipewire.defaultAudioSink
+    readonly property bool isHeadphonesConnected: activePort.includes("headphones")
 
-	readonly property bool isMuted: audioSink.audio.muted
+    property string activePort: ""
+
+    readonly property real volume: {
+        if (audioSink != null) {
+            return audioSink.audio.volume;
+        } else {
+            return 0;
+        }
+    }
+
+    Process {
+        id: activePortCatcher
+
+        command: ["sh", "-c", "pactl list sinks | grep 'Active Port'"]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.activePort = this.text.replace("Active Port: ", "").trim();
+            }
+        }
+    }
+
+    FrameAnimation {
+        running: true
+
+        onTriggered: {
+            activePortCatcher.running = true;
+        }
+    }
 }

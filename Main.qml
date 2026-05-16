@@ -3,16 +3,16 @@ import Quickshell
 import qs.renderers
 import qs.services
 
-Item {
-	id: root
-	
-	LazyLoader {
-		id: notifServiceLoader
-		loading: true
-		source: NotificationService.objectName
-	}
+Scope {
+    id: root
 
-	DesktopWidgets {}
-	NotificationPopupDisplay {}
-	VolumePopupDisplay {}
+    LazyLoader {
+        id: notifServiceLoader
+        loading: true
+        source: NotificationService.objectName
+    }
+
+    StatusBarDisplay {}
+    NotificationPopupDisplay {}
+    VolumePopupDisplay {}
 }

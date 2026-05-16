@@ -2,105 +2,128 @@ import QtQuick
 import qs.services
 
 Item {
-	id: root
+    id: root
 
-	property color textColor: ColorPaletteService.colorScheme.base16[7]
-	
-	property real fontSize: GTK3Service.getFontSize()
+    property color textColor: ColorPaletteService.colors.color6
 
-	property real borderRadius: 5
+    property real fontSize: GTK3Service.getFontSize()
 
-	implicitWidth: layout.implicitWidth + (fontSize * 3)
-	implicitHeight: layout.implicitHeight + (fontSize * 2)
+    property real borderRadius: 5
 
-	Rectangle {
-		anchors.fill: parent
-		color: ColorPaletteService.colorScheme.background
-		radius: root.borderRadius
-		border.color: root.textColor
-		border.width: 2
-	}
+    implicitWidth: layout.implicitWidth + (fontSize * 3)
+    implicitHeight: layout.implicitHeight + (fontSize * 2)
 
-	visible: opacity > 0
+    Rectangle {
+        anchors.fill: parent
+        color: ColorPaletteService.colors.background
+        radius: root.borderRadius
+        border.color: root.textColor
+        border.width: 2
 
-	opacity: 0
+        opacity: 0.9
+    }
 
-	Column {
-		id: layout
+    visible: opacity > 0
 
-		anchors.centerIn: parent
+    opacity: 0
 
-		spacing: 4
+    Column {
+        id: layout
 
-		Rectangle {
-			id: volumeBar
+        anchors.centerIn: parent
 
-			width: parent.width
-			height: 5
+        spacing: 2
 
-			anchors.horizontalCenter: parent.horizontalCenter
+        Item {
+            anchors.horizontalCenter: parent.horizontalCenter
 
-			color: ColorPaletteService.colorScheme.base16[0] ?? "gray"
-			radius: root.borderRadius
+            width: headphoneIndicatorDisplay.implicitWidth
+            height: headphoneIndicatorDisplay.implicitHeight
 
-			visible: !PipewireService.isMuted && PipewireService.volume > 0
+            Text {
+                id: headphoneIndicatorDisplay
+                anchors.centerIn: parent
+                text: PipewireService.isHeadphonesConnected ? "\udb80\udecb" : "\udb81\udfce"
+                color: root.textColor
+                font.family: GTK3Service.getFontName()
+                font.pointSize: root.fontSize * 1.5
+            }
+        }
 
-			Rectangle {
-				width: parent.width * PipewireService.volume
-				height: parent.height
+        Rectangle {
+            id: volumeBar
 
-				color: root.textColor ?? "white"
-				radius: root.borderRadius
+            width: volumeText.implicitWidth
+            height: 5
 
-				Behavior on width {
-					PropertyAnimation {
-						duration: 250
-						easing.type: Easing.OutCubic
-					}
-				}
-			}
-		}
+            anchors.horizontalCenter: parent.horizontalCenter
 
-		Text {
-			id: volumeText
-			anchors.horizontalCenter: parent.horizontalCenter
-			text: {
-				if (!PipewireService.isMuted && PipewireService.volume > 0) {
-					return `VOLUME: ${Math.round(PipewireService.volume * 100)}%`
-				} else if (PipewireService.isMuted && PipewireService.volume > 0) {
-					return `VOLUME: ${Math.round(PipewireService.volume * 100)}% (MUTED)`
-				} else {
-					return `(MUTED)`
-				}
-			}
-			color: root.textColor
-			font.family: GTK3Service.getFontName()
-			font.pointSize: root.fontSize
-		}
-	}
+            color: ColorPaletteService.colors.color0 ?? "gray"
+            radius: root.borderRadius
 
-	Connections {
-		target: PipewireService.audioSink.audio
+            visible: !PipewireService.audioSink.audio.muted && PipewireService.volume > 0
 
-		function onVolumeChanged() {
-			root.opacity = 1;
-			visibilityTimer.restart();
-		}
-	}
+            Rectangle {
+                width: parent.width * PipewireService.volume
+                height: parent.height
 
-	Behavior on opacity {
-		PropertyAnimation {
-			id: opacityTween
-			duration: 250
-		}
-	}
+                color: root.textColor ?? "white"
+                radius: root.borderRadius
 
-	Timer {
-		id: visibilityTimer
-		interval: 5000 - opacityTween.duration
-		
-		onTriggered: {
-			root.opacity = 0;
-		}
-	}
+                Behavior on width {
+                    PropertyAnimation {
+                        duration: 250
+                        easing.type: Easing.OutCubic
+                    }
+                }
+            }
+        }
+
+        Text {
+            id: volumeText
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: {
+                if (!PipewireService.audioSink.audio.muted && PipewireService.volume > 0) {
+                    return `VOLUME: ${Math.round(PipewireService.volume * 100)}%`;
+                } else if (PipewireService.audioSink.audio.muted && PipewireService.volume > 0) {
+                    return `VOLUME: ${Math.round(PipewireService.volume * 100)}% (MUTED)`;
+                } else {
+                    return `(MUTED)`;
+                }
+            }
+            color: root.textColor
+            font.family: GTK3Service.getFontName()
+            font.pointSize: root.fontSize
+        }
+    }
+
+    Connections {
+        target: PipewireService.audioSink.audio
+
+        function onVolumeChanged() {
+            root.opacity = 1;
+            visibilityTimer.restart();
+        }
+
+        function onMutedChanged() {
+            root.opacity = 1;
+            visibilityTimer.restart();
+        }
+    }
+
+    Behavior on opacity {
+        PropertyAnimation {
+            id: opacityTween
+            duration: 250
+        }
+    }
+
+    Timer {
+        id: visibilityTimer
+        interval: 5000 - opacityTween.duration
+
+        onTriggered: {
+            root.opacity = 0;
+        }
+    }
 }
